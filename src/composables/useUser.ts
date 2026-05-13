@@ -37,12 +37,6 @@ export function useUser() {
   }
 
   const initUser = async (supabase: SupabaseClient) => {
-    // Sign in anonymously to establish a Supabase auth session
-    const { error: authError } = await supabase.auth.signInAnonymously()
-    if (authError) {
-      console.warn('Anonymous sign in failed:', authError)
-    }
-
     // 1. Check cookies
     let id = getCookie(COOKIE_NAME)
     if (id) {

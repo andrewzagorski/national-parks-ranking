@@ -4,15 +4,6 @@
 --
 --  Identity & Auth Model
 --  ─────────────────────
---  These are two separate concerns and must not be conflated.
---
---  Authentication → Supabase Anonymous Auth
---    Every visitor calls signInAnonymously() as the very first
---    step. This produces a signed JWT that PostgREST validates,
---    ensuring all requests arrive as the 'authenticated' role
---    rather than 'anon'. The anonymous auth UID is not stored
---    anywhere and is not meaningful to the application.
---
 --  Identity → App UUID (bearer token)
 --    A random UUID is the user's stable identity and effectively
 --    their password. It is resolved client-side in priority order:
@@ -157,7 +148,7 @@ BEGIN
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION public.set_app_user_id() TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.set_app_user_id() TO anon;
 
 -- Register as the PostgREST pre-request hook.
 -- In Supabase you may also need to set this in the dashboard:
@@ -199,7 +190,7 @@ END;
 $$;
 
 REVOKE EXECUTE ON FUNCTION public.find_user_by_fingerprint(TEXT) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION public.find_user_by_fingerprint(TEXT) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.find_user_by_fingerprint(TEXT) TO anon;
 
 
 -- ============================================================
@@ -296,28 +287,22 @@ CREATE POLICY "visits: delete own" ON visits
 -- ============================================================
 
 -- Start from a clean slate on all app tables.
-REVOKE ALL ON parks        FROM anon, authenticated;
-REVOKE ALL ON metrics      FROM anon, authenticated;
-REVOKE ALL ON users        FROM anon, authenticated;
-REVOKE ALL ON ratings      FROM anon, authenticated;
-REVOKE ALL ON user_weights FROM anon, authenticated;
-REVOKE ALL ON visits       FROM anon, authenticated;
+REVOKE ALL ON parks        FROM anon;
+REVOKE ALL ON metrics      FROM anon;
+REVOKE ALL ON users        FROM anon;
+REVOKE ALL ON ratings      FROM anon;
+REVOKE ALL ON user_weights FROM anon;
+REVOKE ALL ON visits       FROM anon;
 
--- Parks and metrics are public. Grant to anon so the park list and
--- metric labels load even during the brief moment before
--- signInAnonymously() resolves.
-GRANT SELECT ON parks   TO anon, authenticated;
-GRANT SELECT ON metrics TO anon, authenticated;
+-- Parks and metrics are public.
+GRANT SELECT ON parks   TO anon;
+GRANT SELECT ON metrics TO anon;
 
--- Users: authenticated users upsert and read their own row.
 -- RLS enforces that id must match app.user_id.
-GRANT SELECT, INSERT, UPDATE ON users TO authenticated;
-
--- User data tables: full CRUD for authenticated users.
--- RLS enforces that user_id must match app.user_id.
-GRANT SELECT, INSERT, UPDATE, DELETE ON ratings      TO authenticated;
-GRANT SELECT, INSERT, UPDATE, DELETE ON user_weights TO authenticated;
-GRANT SELECT, INSERT, UPDATE, DELETE ON visits       TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON users TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ratings      TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON user_weights TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON visits       TO anon;
 
 
 -- ============================================================
@@ -358,7 +343,7 @@ GROUP  BY p.id, p.name, p.slug
 ORDER  BY aggregate_score DESC;
 
 -- Aggregate scores view: public, for the community leaderboard.
-GRANT SELECT ON aggregate_scores TO anon, authenticated;
+GRANT SELECT ON aggregate_scores TO anon;
 
 
 -- ============================================================
