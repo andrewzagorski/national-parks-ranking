@@ -365,14 +365,14 @@ GRANT SELECT ON aggregate_scores TO anon, authenticated;
 -- ============================================================
 
 INSERT INTO metrics (key, label, default_weight, sort_order) VALUES
-    ('landscape_beauty', 'Landscape Beauty', 15, 1),
+    ('landscape_beauty', 'Landscape Beauty', 25, 1),
     ('uniqueness',       'Uniqueness',       15, 2),
-    ('wow_moments',      'Wow Moments',      13, 3),
-    ('crowds',           'Crowds',           12, 4),
-    ('wildlife',         'Wildlife',         12, 5),
-    ('variety',          'Variety',          12, 6),
-    ('selection',        'Selection',        11, 7),
-    ('access',           'Access',           10, 8);
+    ('wow_moments',      'Wow Moments',      10, 3),
+    ('crowds',           'Crowds',           5, 4),
+    ('wildlife',         'Wildlife',         15, 5),
+    ('variety',          'Variety',          10, 6),
+    ('selection',        'Selection',        15, 7),
+    ('access',           'Access',           5, 8);
 
 
 -- ============================================================
