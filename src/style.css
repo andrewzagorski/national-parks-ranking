@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Quicksand:wght@300..700&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    @apply bg-cream text-charcoal font-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-sage text-white px-6 py-3 rounded border-2 border-charcoal shadow-sticker transition-all hover:shadow-sticker-hover active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
+  }
+  .card-postcard {
+    @apply bg-white p-4 rounded-lg border border-sand-container shadow-sm;
+  }
+  .hand-drawn-divider {
+    @apply w-full h-px bg-charcoal opacity-10 my-4;
+  }
+}
