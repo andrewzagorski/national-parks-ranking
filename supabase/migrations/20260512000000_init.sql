@@ -360,6 +360,7 @@ ORDER  BY aggregate_score DESC;
 -- Aggregate scores view: public, for the community leaderboard.
 GRANT SELECT ON aggregate_scores TO anon, authenticated;
 
+
 -- ============================================================
 -- SECTION 7: SEED DATA — METRICS
 -- ============================================================
