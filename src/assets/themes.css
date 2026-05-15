@@ -1,0 +1,230 @@
+/*
+ * themes.css
+ *
+ * Each theme is a [data-theme="name"] attribute selector on <html>.
+ * The CSS variables store OKLCH channel values WITHOUT the oklch() wrapper
+ * so Tailwind can inject the alpha channel via:
+ *   oklch(var(--color-primary) / <alpha-value>)
+ *
+ * Format:  --color-<category>[-variant]: <L> <C> <H>;
+ *
+ * Import this file in your main.js / main.ts BEFORE tailwind's base styles,
+ * or add it to your CSS entry point:
+ *
+ *   import './assets/themes.css'
+ *
+ * The default theme is applied by setting a fallback on :root — swap it out
+ * to whichever theme you want as the out-of-the-box experience.
+ */
+
+*,
+*::before,
+*::after {
+  transition-property: color, background-color, border-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+[data-theme='parks'] {
+  --color-primary: 0.48 0.029 167;
+  --color-primary-highlight: 0.91 0.028 165;
+  --color-primary-tint: 0.3894 0.029 156.54;
+
+  --color-secondary: 0.82 0.0985 33.92;
+  --color-secondary-highlight: 0.9172 0.0429 32.23;
+  --color-secondary-tint: 0.4925 0.0861 34.73;
+
+  --color-accent: 0.225 0.0024 145.49;
+  --color-accent-highlight: 0.25 0.0024 145.49;
+  --color-accent-tint: 0.2 0.0024 145.49;
+
+  --color-background: 0.9831 0.0034 67.78;
+  --color-background-highlight: 0.9493 0.0029 84.56;
+  --color-background-tint: 0.9651 0.0034 67.78;
+
+  --color-on-primary: 0.993 0.0029 84.56;
+  --color-on-primary-highlight: 0.225 0.0024 145.49;
+  --color-on-primary-tint: 0.993 0.0029 84.56;
+
+  --color-on-secondary: 0.225 0.0024 145.49;
+  --color-on-secondary-highlight: 0.225 0.0024 145.49;
+  --color-on-secondary-tint: 0.225 0.0024 145.49;
+
+  --color-on-accent: 0.225 0.0024 145.49;
+  --color-on-accent-highlight: 0.225 0.0024 145.49;
+  --color-on-accent-tint: 0.225 0.0024 145.49;
+
+  --color-on-background: 0.225 0.0024 145.49;
+  --color-on-background-highlight: 0.225 0.0024 145.49;
+  --color-on-background-tint: 0.225 0.0024 145.49;
+}
+
+[data-theme='ocean'] {
+  --color-primary: 0.32 0.09 240;
+  --color-primary-highlight: 0.55 0.1 240;
+  --color-primary-tint: 0.18 0.08 240;
+
+  --color-secondary: 0.6 0.11 195;
+  --color-secondary-highlight: 0.75 0.09 195;
+  --color-secondary-tint: 0.42 0.12 195;
+
+  --color-accent: 0.72 0.13 210;
+  --color-accent-highlight: 0.85 0.1 210;
+  --color-accent-tint: 0.55 0.14 210;
+
+  --color-background: 0.97 0.01 240;
+  --color-background-highlight: 1 0 240;
+  --color-background-tint: 0.9 0.02 240;
+
+  --color-on-primary: 1 0 240;
+  --color-on-primary-highlight: 0.15 0.03 240;
+  --color-on-primary-tint: 1 0 240;
+
+  --color-on-secondary: 0.15 0.03 240;
+  --color-on-secondary-highlight: 0.15 0.03 240;
+  --color-on-secondary-tint: 1 0 240;
+
+  --color-on-accent: 0.15 0.03 240;
+  --color-on-accent-highlight: 0.15 0.03 240;
+  --color-on-accent-tint: 1 0 240;
+
+  --color-on-background: 0.15 0.03 240;
+  --color-on-background-highlight: 0.15 0.03 240;
+  --color-on-background-tint: 0.15 0.03 240;
+}
+
+[data-theme='forest'] {
+  --color-primary: 0.35 0.1 145;
+  --color-primary-highlight: 0.55 0.1 145;
+  --color-primary-tint: 0.22 0.09 145;
+
+  --color-secondary: 0.6 0.08 140;
+  --color-secondary-highlight: 0.75 0.07 140;
+  --color-secondary-tint: 0.44 0.09 140;
+
+  --color-accent: 0.72 0.14 75;
+  --color-accent-highlight: 0.85 0.11 75;
+  --color-accent-tint: 0.54 0.15 75;
+
+  --color-background: 0.97 0.01 90;
+  --color-background-highlight: 1 0 90;
+  --color-background-tint: 0.91 0.02 90;
+
+  --color-on-primary: 1 0 90;
+  --color-on-primary-highlight: 0.18 0.03 60;
+  --color-on-primary-tint: 1 0 90;
+
+  --color-on-secondary: 0.18 0.03 60;
+  --color-on-secondary-highlight: 0.18 0.03 60;
+  --color-on-secondary-tint: 1 0 90;
+
+  --color-on-accent: 0.18 0.03 60;
+  --color-on-accent-highlight: 0.18 0.03 60;
+  --color-on-accent-tint: 1 0 90;
+
+  --color-on-background: 0.18 0.03 60;
+  --color-on-background-highlight: 0.18 0.03 60;
+  --color-on-background-tint: 0.18 0.03 60;
+}
+
+[data-theme='ember'] {
+  --color-primary: 0.55 0.17 38;
+  --color-primary-highlight: 0.7 0.15 38;
+  --color-primary-tint: 0.38 0.16 38;
+
+  --color-secondary: 0.42 0.16 20;
+  --color-secondary-highlight: 0.6 0.14 20;
+  --color-secondary-tint: 0.28 0.15 20;
+
+  --color-accent: 0.78 0.14 68;
+  --color-accent-highlight: 0.9 0.11 68;
+  --color-accent-tint: 0.6 0.16 68;
+
+  --color-background: 0.97 0.01 60;
+  --color-background-highlight: 1 0 60;
+  --color-background-tint: 0.91 0.02 60;
+
+  --color-on-primary: 0.16 0.02 38;
+  --color-on-primary-highlight: 0.16 0.02 38;
+  --color-on-primary-tint: 1 0 60;
+
+  --color-on-secondary: 1 0 60;
+  --color-on-secondary-highlight: 0.16 0.02 38;
+  --color-on-secondary-tint: 1 0 60;
+
+  --color-on-accent: 0.16 0.02 38;
+  --color-on-accent-highlight: 0.16 0.02 38;
+  --color-on-accent-tint: 1 0 60;
+
+  --color-on-background: 0.16 0.02 38;
+  --color-on-background-highlight: 0.16 0.02 38;
+  --color-on-background-tint: 0.16 0.02 38;
+}
+
+[data-theme='dusk'] {
+  --color-primary: 0.4 0.14 285;
+  --color-primary-highlight: 0.6 0.13 285;
+  --color-primary-tint: 0.26 0.12 285;
+
+  --color-secondary: 0.55 0.1 330;
+  --color-secondary-highlight: 0.72 0.09 330;
+  --color-secondary-tint: 0.38 0.11 330;
+
+  --color-accent: 0.72 0.1 300;
+  --color-accent-highlight: 0.85 0.08 300;
+  --color-accent-tint: 0.55 0.12 300;
+
+  --color-background: 0.97 0.01 285;
+  --color-background-highlight: 1 0 285;
+  --color-background-tint: 0.91 0.02 285;
+
+  --color-on-primary: 1 0 285;
+  --color-on-primary-highlight: 0.16 0.04 285;
+  --color-on-primary-tint: 1 0 285;
+
+  --color-on-secondary: 0.16 0.04 285;
+  --color-on-secondary-highlight: 0.16 0.04 285;
+  --color-on-secondary-tint: 1 0 285;
+
+  --color-on-accent: 0.16 0.04 285;
+  --color-on-accent-highlight: 0.16 0.04 285;
+  --color-on-accent-tint: 1 0 285;
+
+  --color-on-background: 0.16 0.04 285;
+  --color-on-background-highlight: 0.16 0.04 285;
+  --color-on-background-tint: 0.16 0.04 285;
+}
+
+[data-theme='mono'] {
+  --color-primary: 0.28 0.01 250;
+  --color-primary-highlight: 0.5 0.01 250;
+  --color-primary-tint: 0.14 0.01 250;
+
+  --color-secondary: 0.55 0.01 250;
+  --color-secondary-highlight: 0.72 0.01 250;
+  --color-secondary-tint: 0.38 0.01 250;
+
+  --color-accent: 0.2 0.02 250;
+  --color-accent-highlight: 0.4 0.02 250;
+  --color-accent-tint: 0.08 0.01 250;
+
+  --color-background: 0.97 0 250;
+  --color-background-highlight: 1 0 250;
+  --color-background-tint: 0.91 0.01 250;
+
+  --color-on-primary: 1 0 250;
+  --color-on-primary-highlight: 0.15 0.01 250;
+  --color-on-primary-tint: 1 0 250;
+
+  --color-on-secondary: 0.15 0.01 250;
+  --color-on-secondary-highlight: 0.15 0.01 250;
+  --color-on-secondary-tint: 1 0 250;
+
+  --color-on-accent: 1 0 250;
+  --color-on-accent-highlight: 1 0 250;
+  --color-on-accent-tint: 1 0 250;
+
+  --color-on-background: 0.15 0.01 250;
+  --color-on-background-highlight: 0.15 0.01 250;
+  --color-on-background-tint: 0.15 0.01 250;
+}

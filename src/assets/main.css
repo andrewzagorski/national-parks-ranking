@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Quicksand:wght@300..700&display=swap');
+
+@import 'tailwindcss';
+@config '../../tailwind.config.js';
+
+@layer base {
+  body {
+    @apply bg-background font-serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-bold;
+  }
+}
+
+@layer utilities {
+  .bg-primary {
+    color: oklch(var(--color-on-primary));
+  }
+  .bg-primary-highlight {
+    color: oklch(var(--color-on-primary-highlight));
+  }
+  .bg-primary-tint {
+    color: oklch(var(--color-on-primary-tint));
+  }
+
+  .bg-secondary {
+    color: oklch(var(--color-on-secondary));
+  }
+  .bg-secondary-highlight {
+    color: oklch(var(--color-on-secondary-highlight));
+  }
+  .bg-secondary-tint {
+    color: oklch(var(--color-on-secondary-tint));
+  }
+
+  .bg-accent {
+    color: oklch(var(--color-on-accent));
+  }
+  .bg-accent-highlight {
+    color: oklch(var(--color-on-accent-highlight));
+  }
+  .bg-accent-tint {
+    color: oklch(var(--color-on-accent-tint));
+  }
+
+  .bg-background {
+    color: oklch(var(--color-on-background));
+  }
+  .bg-background-highlight {
+    color: oklch(var(--color-on-background-highlight));
+  }
+  .bg-background-tint {
+    color: oklch(var(--color-on-background-tint));
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary border-accent shadow-sticker hover:shadow-sticker-hover rounded border-2 px-6 py-3 text-white transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
+  }
+  .card-postcard {
+    @apply border-accent-highlight rounded-lg border bg-white p-4 shadow-sm;
+  }
+  .hand-drawn-divider {
+    @apply bg-accent my-4 h-px w-full opacity-10;
+  }
+}

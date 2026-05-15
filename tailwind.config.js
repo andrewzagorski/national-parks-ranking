@@ -7,22 +7,34 @@ export default {
   theme: {
     extend: {
       colors: {
-        sage: {
-          DEFAULT: '#4e635a',
-          container: '#8da399',
-          fixed: '#d1e8dd',
+        primary: {
+          DEFAULT: 'oklch(var(--color-primary) / <alpha-value>)',
+          highlight: 'oklch(var(--color-primary-highlight) / <alpha-value>)',
+          tint: 'oklch(var(--color-primary-tint) / <alpha-value>)',
         },
-        terracotta: {
-          DEFAULT: '#8b4e3f',
-          container: '#fdad9a',
-          fixed: '#ffdad2',
+        secondary: {
+          DEFAULT: 'oklch(var(--color-secondary) / <alpha-value>)',
+          highlight: 'oklch(var(--color-secondary-highlight) / <alpha-value>)',
+          tint: 'oklch(var(--color-secondary-tint) / <alpha-value>)',
         },
-        sand: {
-          DEFAULT: '#f5f3f1',
-          container: '#efeeec',
+        accent: {
+          DEFAULT: 'oklch(var(--color-accent) / <alpha-value>)',
+          highlight: 'oklch(var(--color-accent-highlight) / <alpha-value>)',
+          tint: 'oklch(var(--color-accent-tint) / <alpha-value>)',
         },
-        cream: '#fbf9f7',
-        charcoal: '#1b1c1b',
+        background: {
+          DEFAULT: 'oklch(var(--color-background) / <alpha-value>)',
+          highlight: 'oklch(var(--color-background-highlight) / <alpha-value>)',
+          tint: 'oklch(var(--color-background-tint) / <alpha-value>)',
+        },
+        writing: {
+          DEFAULT: 'oklch(var(--color-on-background) / <alpha-value>)',
+          onprimary: 'oklch(var(--color-on-primary) / <alpha-value>)',
+          onsecondary: 'oklch(var(--color-on-secondary) / <alpha-value>)',
+          onaccent: 'oklch(var(--color-on-accent) / <alpha-value>)',
+          onbackground: 'oklch(var(--color-on-background) / <alpha-value>)',
+        },
+
       },
       fontFamily: {
         sans: ['Quicksand', 'sans-serif'],

@@ -9,8 +9,8 @@ INSERT INTO users (id) VALUES
     ('a0000000-0000-0000-0000-000000000001'),
     ('a0000000-0000-0000-0000-000000000002');
 
--- Sample visits
-INSERT INTO visits (user_id, park_id, visited_on, notes) VALUES
+-- Sample user_park_ratings
+INSERT INTO user_park_ratings (user_id, park_id, last_visit_date, notes) VALUES
     ('a0000000-0000-0000-0000-000000000001',
         (SELECT id FROM parks WHERE slug = 'grand-canyon'),
         '2023-05-14',
