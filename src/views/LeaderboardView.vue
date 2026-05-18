@@ -2,8 +2,9 @@
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../utils/supabase'
 import { useUserStore } from '../stores/user'
-import { Mountain, Users, Award, Globe } from 'lucide-vue-next'
+import { Mountain, Award, Globe } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import Postcard from '../components/Postcard.vue'
 
 interface ParkScore {
   park_id: number
@@ -159,56 +160,19 @@ onMounted(() => {
 
       <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div
-          v-for="(park, index) in currentLeaderboard"
+          v-for="park in currentLeaderboard"
           :key="park.park_id"
-          class="card-postcard group relative flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1"
+          class="group relative flex flex-col overflow-hidden transition-all duration-300"
         >
-          <div class="mb-4 flex items-start justify-between">
-            <div
-              :class="[
-                'font-display -rotate-2 rounded-sm px-3 py-1 font-bold text-white shadow-sm',
-                mode === 'global' ? 'bg-secondary' : 'bg-primary'
-              ]"
-            >
-              #{{ index + 1 }}
-            </div>
-            <div
-              v-if="mode === 'global'"
-              class="flex items-center gap-1 text-sm"
-            >
-              <Users :size="14" />
-              <span>{{ park.rater_count }} raters</span>
-            </div>
-          </div>
-
-          <h3
-            class="group-hover:text-primary mb-2 text-2xl leading-tight transition-colors"
-          >
-            {{ park.park_name }}
-          </h3>
-
-          <div
-            class="border-background-highlight mt-auto flex items-end justify-between border-t pt-4"
-          >
-            <div class="flex flex-col">
-              <span class="text-[10px] font-bold tracking-widest uppercase">
-                {{ mode === 'global' ? 'Aggregate Score' : 'My Rubric Score' }}
-              </span>
-              <span
-                class="font-display text-3xl font-bold"
-                :class="mode === 'global' ? 'text-primary' : 'text-secondary'"
-              >
-                {{ park.aggregate_score }}
-              </span>
-            </div>
-
-            <RouterLink
-              :to="`/rate/${park.park_slug}`"
-              class="btn-primary px-4 py-2 text-sm"
-            >
-              {{ mode === 'global' ? 'Rate Park' : 'Edit Rating' }}
-            </RouterLink>
-          </div>
+          <Postcard
+            :id="park.park_id"
+            class="hover:-translate-y-1"
+            :name="park.park_name"
+            :slug="park.park_slug"
+            :rater-count="park.rater_count"
+            :aggregate-score="park.aggregate_score"
+            :size="'sm'"
+          />
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
 import { Users } from 'lucide-vue-next'
 const props = defineProps({
   slug: {
@@ -30,7 +31,23 @@ const props = defineProps({
     required: false,
     default: 'sm',
     validator: (value: string) => ['sm', 'xl'].includes(value)
+  },
+  mode: {
+    type: String,
+    required: false,
+    default: 'global',
+    validator: (value: string) => ['global', 'my', 'none'].includes(value)
   }
+})
+
+const images = import.meta.glob<{ default: string }>('../assets/parks/*.webp', {
+  eager: true
+})
+
+const imageSrc = computed(() => {
+  const path = `../assets/parks/${props.slug}.webp`
+  const mod = images[path]
+  return mod?.default || (mod as unknown as string)
 })
 
 // TODO: if park data is not provided, fetch it from the API using slug
@@ -39,23 +56,86 @@ const props = defineProps({
 <template>
   <div class="m-4 p-4">
     <div
-      :class="[
-        'bg-background-tint border-accent rounded-sm border-2 font-sans text-2xl font-semibold',
-        props.size === 'sm' ? 'h-48 max-w-xs' : 'h-64 max-w-lg'
-      ]"
+      class="border-accent relative w-xs overflow-hidden rounded-sm border-2 font-sans text-2xl font-semibold"
     >
-      <div
-        class="bg-primary border-accent flex place-content-center gap-2 border-b px-2 pb-1"
-      >
-        <div class="grow">
-          {{ props.name }}
+      <div>
+        <div
+          class="bg-primary border-accent flex place-content-center gap-2 border-b px-2 pb-1 font-serif"
+        >
+          <div class="grow">
+            {{ props.name }}
+          </div>
+          <div
+            v-if="mode === 'global'"
+            class="flex shrink place-content-center gap-1 py-2 pr-2"
+          >
+            <Users :size="16" class="" />
+            <span class="text-sm">{{ props.raterCount }}</span>
+          </div>
         </div>
-        <div class="flex shrink place-content-center gap-0 py-2 pr-2">
-          <Users :size="16" class="" />
-          <span class="text-sm">{{ props.raterCount }}</span>
+        <div class="group h-[178px]">
+          <img
+            v-if="imageSrc"
+            :src="imageSrc"
+            loading="lazy"
+            alt=""
+            class="absolute -z-10 object-cover"
+          />
+          <div class="h-[110px]"></div>
+          <div
+            v-if="mode !== 'none'"
+            class="flex items-center justify-between px-4"
+          >
+            <div class="flex flex-col">
+              <div
+                class="tape border-gray z-5 h-[10px] w-[20px] -rotate-2 place-self-center bg-amber-200/90"
+              ></div>
+              <div
+                class="font-display bg-secondary mt-[-5px] flex -rotate-2 flex-col items-center rounded-xs border border-black/10 px-2 py-1 shadow-[3px_3px_0_rgba(0,0,0,0.35)]"
+              >
+                <span v-if="props.raterCount > 0" class="text-xxs">{{
+                  mode === 'global' ? 'Global Score' : 'Your Score'
+                }}</span>
+                <div v-else class="text-xxs flex flex-col items-center">
+                  <span>No</span><span>ratings</span><span>yet!</span>
+                </div>
+                <span v-if="props.raterCount > 0" class="text-lg font-bold">{{
+                  props.aggregateScore
+                }}</span>
+              </div>
+            </div>
+            <div>
+              <RouterLink
+                :to="`/rate/${slug}`"
+                class="btn-primary font-serif text-sm"
+              >
+                {{ mode === 'global' ? 'Rate Park' : 'Edit Rating' }}
+              </RouterLink>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="text-secondary">{{ props.aggregateScore }}</div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@reference '../assets/main.css';
+
+.tape {
+  clip-path: polygon(
+    5% 0%,
+    0% 10%,
+    10% 25%,
+    0% 50%,
+    10% 75%,
+    5% 100%,
+    95% 100%,
+    100% 75%,
+    90% 50%,
+    100% 25%,
+    90% 10%,
+    95% 0%
+  );
+}
+</style>

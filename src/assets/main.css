@@ -61,8 +61,9 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary border-accent shadow-sticker hover:shadow-sticker-hover rounded border-2 px-6 py-3 text-white transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
+    @apply bg-primary-highlight/80 border-accent hover:bg-primary-highlight hover:drop-shadow-primary-highlight sm:hover:drop-shadow-primary-highlight rounded border-2 px-3 py-2 text-[oklch(var(--color-on-primary-highlight))] hover:drop-shadow-sm sm:hover:drop-shadow-lg;
   }
+
   .card-postcard {
     @apply border-accent-highlight rounded-lg border bg-white p-4 shadow-sm;
   }

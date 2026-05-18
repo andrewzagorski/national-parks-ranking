@@ -51,6 +51,9 @@ export default {
       boxShadow: {
         'sticker': '4px 4px 0px 0px rgba(27, 28, 27, 1)',
         'sticker-hover': '2px 2px 0px 0px rgba(27, 28, 27, 1)',
+      },
+      fontSize: {
+        'xxs': ['0.625rem', { lineHeight: '0.75rem' }]
       }
     },
   },
