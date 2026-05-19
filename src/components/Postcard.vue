@@ -57,7 +57,8 @@ const imageSrc = computed(() => {
 <template>
   <div>
     <div
-      class="border-accent relative flex h-[220px] w-xs flex-col overflow-hidden rounded-sm border-2 font-sans text-2xl font-semibold shadow"
+      class="border-accent bg-primary-tint relative -z-20 flex w-xs flex-col overflow-hidden rounded-sm border-2 font-sans text-2xl font-semibold shadow"
+      :class="[imageSrc ? 'h-[220px]' : 'max-h-[220px]']"
     >
       <div
         class="bg-primary border-accent flex place-content-center gap-2 border-b px-2 pb-1 font-serif"
@@ -84,6 +85,7 @@ const imageSrc = computed(() => {
         <div
           v-if="mode !== 'none'"
           class="flex items-center justify-between px-4 pb-4"
+          :class="[imageSrc ? '' : 'pt-4']"
         >
           <div class="flex flex-col">
             <div
