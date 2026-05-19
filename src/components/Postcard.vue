@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { Users } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { Award, Users } from 'lucide-vue-next'
 const props = defineProps({
   slug: {
     type: String,
@@ -37,6 +37,11 @@ const props = defineProps({
     required: false,
     default: 'global',
     validator: (value: string) => ['global', 'personal', 'none'].includes(value)
+  },
+  rank: {
+    type: Number,
+    required: false,
+    default: undefined
   }
 })
 
@@ -82,6 +87,37 @@ const imageSrc = computed(() => {
           alt=""
           class="absolute inset-0 -z-10 h-full w-full object-cover"
         />
+        <div v-if="rank" :key="mode" class="flex grow justify-end pt-2 pr-2">
+          <div v-if="rank > 3" class="flex flex-col">
+            <div
+              class="tape border-gray z-5 h-[10px] w-[20px] -rotate-2 place-self-center bg-amber-200/90"
+            ></div>
+            <div
+              class="sticky-note bg-secondary-highlight mt-[-5px] flex -rotate-2 flex-col items-center px-2 py-1 text-sm"
+            >
+              #{{ rank }}
+            </div>
+          </div>
+          <div
+            v-else
+            class="relative flex rotate-3 flex-col items-center gap-0 text-sm text-slate-900"
+          >
+            <Award
+              stroke-width="1"
+              :size="40"
+              :fill="
+                rank === 1
+                  ? 'var(--color-amber-400)'
+                  : rank === 2
+                    ? 'var(--color-slate-300)'
+                    : 'var(--color-amber-700)'
+              "
+            />
+            <span class="-mt-9.5" :class="rank === 3 ? 'text-stone-200' : ''">
+              {{ rank }}
+            </span>
+          </div>
+        </div>
         <div
           v-if="mode !== 'none'"
           class="flex items-center justify-between px-4 pb-4"
@@ -92,7 +128,7 @@ const imageSrc = computed(() => {
               class="tape border-gray z-5 h-[10px] w-[20px] -rotate-2 place-self-center bg-amber-200/90"
             ></div>
             <div
-              class="font-display bg-secondary mt-[-5px] flex -rotate-2 flex-col items-center rounded-xs border border-black/10 px-2 py-1 shadow-[3px_3px_0_rgba(0,0,0,0.35)]"
+              class="sticky-note bg-secondary mt-[-5px] flex -rotate-2 flex-col items-center px-2 py-1"
             >
               <span
                 v-if="mode === 'personal' || props.raterCount > 0"
@@ -141,5 +177,9 @@ const imageSrc = computed(() => {
     90% 10%,
     95% 0%
   );
+}
+
+.sticky-note {
+  @apply font-display rounded-xs border border-black/10 shadow-[3px_3px_0_rgba(0,0,0,0.35)];
 }
 </style>

@@ -1,7 +1,23 @@
 <script setup lang="ts">
-import { RouterView, RouterLink } from 'vue-router'
-import { Mountain, Award, Settings, Fingerprint } from 'lucide-vue-next'
+import { RouterView, RouterLink, useRoute } from 'vue-router'
+import {
+  Mountain,
+  Award,
+  Settings,
+  Fingerprint,
+  Search,
+  CircleX
+} from 'lucide-vue-next'
 import { useTheme } from './composables/useTheme'
+import { computed } from 'vue'
+import { useLeaderboardStore } from './stores/leaderboard'
+import { storeToRefs } from 'pinia'
+
+const leaderboardStore = useLeaderboardStore()
+const { searchQuery } = storeToRefs(leaderboardStore)
+
+const route = useRoute()
+const isLeaderboardPage = computed(() => route.path === '/')
 
 useTheme()
 </script>
@@ -26,6 +42,23 @@ useTheme()
             >The Parks Rubric</span
           >
         </RouterLink>
+
+        <div v-if="isLeaderboardPage" class="flex items-center justify-center">
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="focus:border-primary-highlight text-md bg-background-highlight border-primary-tint w-2xs rounded-lg border py-1 pr-10 pl-4 md:w-sm"
+          />
+          <div class="text-secondary-tint relative flex items-center">
+            <Search :size="20" class="-ml-10" />
+            <CircleX
+              v-if="searchQuery"
+              :size="14"
+              class="text-secondary-tint cursor-pointer"
+              @click="searchQuery = ''"
+            />
+          </div>
+        </div>
 
         <nav class="hidden items-center gap-6 md:flex">
           <RouterLink to="/" class="nav-link">Leaderboard</RouterLink>
