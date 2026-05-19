@@ -18,43 +18,43 @@
 }
 
 @layer utilities {
-  .bg-primary {
+  :where(.bg-primary) {
     color: oklch(var(--color-on-primary));
   }
-  .bg-primary-highlight {
+  :where(.bg-primary-highlight) {
     color: oklch(var(--color-on-primary-highlight));
   }
-  .bg-primary-tint {
+  :where(.bg-primary-tint) {
     color: oklch(var(--color-on-primary-tint));
   }
 
-  .bg-secondary {
+  :where(.bg-secondary) {
     color: oklch(var(--color-on-secondary));
   }
-  .bg-secondary-highlight {
+  :where(.bg-secondary-highlight) {
     color: oklch(var(--color-on-secondary-highlight));
   }
-  .bg-secondary-tint {
+  :where(.bg-secondary-tint) {
     color: oklch(var(--color-on-secondary-tint));
   }
 
-  .bg-accent {
+  :where(.bg-accent) {
     color: oklch(var(--color-on-accent));
   }
-  .bg-accent-highlight {
+  :where(.bg-accent-highlight) {
     color: oklch(var(--color-on-accent-highlight));
   }
-  .bg-accent-tint {
+  :where(.bg-accent-tint) {
     color: oklch(var(--color-on-accent-tint));
   }
 
-  .bg-background {
+  :where(.bg-background) {
     color: oklch(var(--color-on-background));
   }
-  .bg-background-highlight {
+  :where(.bg-background-highlight) {
     color: oklch(var(--color-on-background-highlight));
   }
-  .bg-background-tint {
+  :where(.bg-background-tint) {
     color: oklch(var(--color-on-background-tint));
   }
 }
