@@ -71,3 +71,18 @@
     @apply bg-accent my-4 h-px w-full opacity-10;
   }
 }
+
+/* TODO tooltip style */
+.v-popper--theme-tooltip .v-popper__inner {
+  @apply bg-primary text-writing-onprimary font-serif text-sm shadow-sm;
+  border-radius: 6px;
+}
+
+.v-popper--theme-tooltip .v-popper__arrow-outer {
+  border-color: oklch(var(--color-primary)) !important;
+}
+
+.v-popper--theme-tooltip .v-popper__arrow-inner {
+  visibility: visible;
+  border-color: oklch(var(--color-primary)) !important;
+}

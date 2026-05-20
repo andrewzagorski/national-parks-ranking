@@ -3,7 +3,8 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '../utils/supabase'
 import { useUserStore } from '../stores/user'
-import { ChevronLeft, Save, Mountain } from 'lucide-vue-next'
+import { ChevronLeft, Save, Mountain, ChevronDown } from 'lucide-vue-next'
+import rubric, { type RubricItem } from '../utils/rubric'
 
 const route = useRoute()
 const router = useRouter()
@@ -31,6 +32,15 @@ const metrics = ref<Metric[]>([])
 const ratings = ref<Record<number, number>>({})
 const loading = ref(true)
 const saving = ref(false)
+const metricsDetails = ref<
+  Record<
+    number,
+    Metric & {
+      expanded: boolean
+      rubric: RubricItem[]
+    }
+  >
+>({})
 
 const fetchData = async () => {
   loading.value = true
@@ -53,6 +63,14 @@ const fetchData = async () => {
       .order('sort_order')
 
     metrics.value = metricsData || []
+
+    metrics.value.forEach((m) => {
+      metricsDetails.value[m.id] = {
+        ...m,
+        expanded: false,
+        rubric: rubric[m.key as keyof typeof rubric] as RubricItem[]
+      }
+    })
 
     // Fetch existing ratings
     const { data: ratingsData } = await supabase
@@ -133,14 +151,38 @@ onMounted(() => {
       </p>
 
       <div class="space-y-10">
-        <div v-for="metric in metrics" :key="metric.id" class="relative">
-          <h3
-            class="font-display mb-4 flex items-center gap-2 text-lg font-bold"
+        <div v-for="metric in metricsDetails" :key="metric.id" class="relative">
+          <div
+            class="hover:text-primary mb-4 flex cursor-pointer items-center gap-2 transition-all duration-200"
+            :class="metric.expanded ? 'col-span-2' : 'col-start-1 row-start-1'"
+            @click="metric.expanded = !metric.expanded"
           >
-            <span class="bg-primary h-2 w-2 rounded-full"></span>
-            {{ metric.label }}
-          </h3>
+            <h3 class="font-display flex items-center gap-2 text-lg font-bold">
+              <span class="bg-primary h-2 w-2 rounded-full"></span>
+              {{ metric.label }}
+            </h3>
 
+            <ChevronDown :class="{ 'rotate-180': metric.expanded }" />
+          </div>
+          <div
+            v-if="metric.expanded"
+            class="bg-background-highlight col-span-2 mb-4 grid grid-cols-3 justify-center text-sm text-gray-600"
+          >
+            <div
+              v-for="item in metric.rubric"
+              :key="item.score"
+              class="flex flex-col items-center p-2 shadow"
+            >
+              <div
+                class="text-primary border-secondary font-display w-full border-b pb-2 text-center font-bold"
+              >
+                {{ item.score }}
+              </div>
+              <div class="flex grow flex-col justify-center text-center">
+                {{ item.description }}
+              </div>
+            </div>
+          </div>
           <div class="flex justify-between gap-2">
             <button
               v-for="score in 5"

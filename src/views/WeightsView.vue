@@ -3,17 +3,11 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../utils/supabase'
 import { useUserStore } from '../stores/user'
 import { Save, RefreshCw, Mountain } from 'lucide-vue-next'
+import type { Database } from '../utils/database.types'
 
 const userStore = useUserStore()
 
-interface Metric {
-  id: number
-  key: string
-  label: string
-  default_weight: number
-}
-
-const metrics = ref<Metric[]>([])
+const metrics = ref<Database['public']['Tables']['metrics']['Row'][]>([])
 const weights = ref<Record<number, number>>({})
 const loading = ref(true)
 const saving = ref(false)
@@ -103,6 +97,7 @@ onMounted(() => {
         <div class="mb-4 flex items-end justify-between">
           <div>
             <h3
+              v-tooltip="metric.description"
               class="font-display group-hover:text-primary text-xl font-bold transition-colors"
             >
               {{ metric.label }}

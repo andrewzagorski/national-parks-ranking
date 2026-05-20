@@ -41,6 +41,7 @@ export type Database = {
           key: string
           label: string
           sort_order: number
+          description: string
         }
         Insert: {
           default_weight: number
@@ -48,6 +49,7 @@ export type Database = {
           key: string
           label: string
           sort_order: number
+          description: string
         }
         Update: {
           default_weight?: number
@@ -55,6 +57,7 @@ export type Database = {
           key?: string
           label?: string
           sort_order?: number
+          description?: string
         }
         Relationships: []
       }

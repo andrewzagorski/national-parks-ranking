@@ -93,7 +93,7 @@ const imageSrc = computed(() => {
               class="tape border-gray z-5 h-[10px] w-[20px] -rotate-2 place-self-center bg-amber-200/90"
             ></div>
             <div
-              class="sticky-note bg-secondary-highlight mt-[-5px] flex -rotate-2 flex-col items-center px-2 py-1 text-sm"
+              class="sticky-note bg-secondary-highlight mt-[-5px] flex rotate-2 flex-col items-center px-2 py-1 text-sm"
             >
               #{{ rank }}
             </div>
