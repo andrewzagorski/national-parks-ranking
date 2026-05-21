@@ -31,23 +31,26 @@ useTheme()
       <div
         class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4"
       >
-        <RouterLink to="/" class="group flex items-center gap-2">
+        <RouterLink to="/" class="group flex shrink items-center gap-2">
           <div
-            class="bg-primary rounded-lg p-1.5 text-white transition-transform group-hover:rotate-6"
+            class="bg-primary shrink-0 rounded-lg p-1.5 text-white transition-transform group-hover:rotate-6"
           >
             <Mountain :size="20" />
           </div>
           <span
-            class="font-display text-primary text-xl font-bold tracking-tight"
+            class="font-display text-primary text-left text-lg leading-tight font-bold tracking-tight sm:text-xl md:text-2xl"
             >The Parks Rubric</span
           >
         </RouterLink>
 
-        <div v-if="isLeaderboardPage" class="flex items-center justify-center">
+        <div
+          v-if="isLeaderboardPage"
+          class="flex shrink items-center justify-center"
+        >
           <input
             v-model="searchQuery"
             type="text"
-            class="focus:border-primary-highlight text-md bg-background-highlight border-primary-tint w-2xs rounded-lg border py-1 pr-10 pl-4 md:w-sm"
+            class="focus:border-primary-highlight text-md bg-background-highlight border-primary-tint box-border w-32 min-w-0 shrink rounded-lg border py-1 pr-10 pl-4 sm:w-2xs lg:w-xs"
           />
           <div class="text-secondary-tint relative flex items-center">
             <Search :size="20" class="-ml-10" />

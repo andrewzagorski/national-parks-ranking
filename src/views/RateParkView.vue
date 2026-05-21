@@ -166,19 +166,21 @@ onMounted(() => {
           </div>
           <div
             v-if="metric.expanded"
-            class="bg-background-highlight col-span-2 mb-4 grid grid-cols-3 justify-center text-sm text-gray-600"
+            class="bg-background-tint col-span-2 mb-4 grid grid-cols-3 justify-center gap-1 rounded-md p-1 text-sm text-gray-600"
           >
             <div
               v-for="item in metric.rubric"
               :key="item.score"
-              class="flex flex-col items-center p-2 shadow"
+              class="bg-background-highlight flex flex-col items-center rounded-md p-2 shadow"
             >
               <div
-                class="text-primary border-secondary font-display w-full border-b pb-2 text-center font-bold"
+                class="text-primary border-secondary font-display w-full border-b pb-2 text-center font-bold md:text-lg"
               >
                 {{ item.score }}
               </div>
-              <div class="flex grow flex-col justify-center text-center">
+              <div
+                class="flex grow flex-col justify-center text-center text-xs md:text-sm"
+              >
                 {{ item.description }}
               </div>
             </div>

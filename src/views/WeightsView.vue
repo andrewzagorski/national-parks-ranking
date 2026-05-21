@@ -2,7 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../utils/supabase'
 import { useUserStore } from '../stores/user'
-import { Save, RefreshCw, Mountain } from 'lucide-vue-next'
+import { Save, RefreshCw, Mountain, Info, CircleCheck } from 'lucide-vue-next'
 import type { Database } from '../utils/database.types'
 
 const userStore = useUserStore()
@@ -11,6 +11,9 @@ const metrics = ref<Database['public']['Tables']['metrics']['Row'][]>([])
 const weights = ref<Record<number, number>>({})
 const loading = ref(true)
 const saving = ref(false)
+const lastUserWeights = ref<Record<number, number>>({})
+
+// TODO rework for pinia
 
 const fetchData = async () => {
   loading.value = true
@@ -40,6 +43,8 @@ const fetchData = async () => {
     })
   }
 
+  lastUserWeights.value = { ...weights.value }
+
   loading.value = false
 }
 
@@ -60,6 +65,8 @@ const saveWeights = async () => {
     .from('user_weights')
     .upsert(upserts, { onConflict: 'user_id, metric_id' })
 
+  lastUserWeights.value = { ...weights.value }
+
   if (error) {
     console.error('Error saving weights:', error)
   }
@@ -67,9 +74,7 @@ const saveWeights = async () => {
 }
 
 const resetWeights = () => {
-  metrics.value.forEach((m) => {
-    weights.value[m.id] = m.default_weight
-  })
+  weights.value = { ...lastUserWeights.value }
 }
 
 onMounted(() => {
@@ -96,12 +101,37 @@ onMounted(() => {
       <div v-for="metric in metrics" :key="metric.id" class="group">
         <div class="mb-4 flex items-end justify-between">
           <div>
-            <h3
-              v-tooltip="metric.description"
-              class="font-display group-hover:text-primary text-xl font-bold transition-colors"
+            <VTooltip
+              :triggers="['hover']"
+              class="hidden items-center gap-2 sm:flex"
             >
-              {{ metric.label }}
-            </h3>
+              <h3
+                class="font-display group-hover:text-primary text-xl font-bold transition-colors"
+              >
+                {{ metric.label }}
+              </h3>
+              <template #popper>
+                {{ metric.description }}
+              </template>
+              <Info :size="12" class="text-primary" />
+            </VTooltip>
+            <div class="flex items-center gap-2 sm:hidden">
+              <h3
+                class="font-display group-hover:text-primary text-xl font-bold transition-colors"
+              >
+                {{ metric.label }}
+              </h3>
+              <VTooltip
+                :triggers="['click', 'touch']"
+                :auto-hide="true"
+                class="cursor-pointer"
+              >
+                <Info :size="12" class="text-primary" />
+                <template #popper>
+                  {{ metric.description }}
+                </template>
+              </VTooltip>
+            </div>
             <span class="tracking-widest/30 text-[10px] font-bold uppercase"
               >Importance Weight</span
             >
@@ -124,34 +154,37 @@ onMounted(() => {
 
       <!-- Footer Actions -->
       <div
-        class="border-accent shadow-sticker sticky bottom-20 mt-16 flex flex-col items-center justify-between gap-4 rounded-2xl border-2 bg-white/80 p-6 backdrop-blur-md md:bottom-8 md:flex-row"
+        class="border-accent shadow-sticker sticky bottom-20 mx-auto mt-16 grid grid-cols-2 items-center justify-items-center gap-4 rounded-2xl border-2 bg-white/80 p-4 backdrop-blur-md sm:w-fit md:bottom-8"
       >
-        <div class="text-center md:text-left">
-          <span class="block text-[10px] font-bold tracking-widest uppercase"
+        <div class="col-span-1">
+          <span
+            class="block text-center text-[10px] font-bold tracking-widest uppercase"
             >Total Distribution</span
           >
-          <span
-            class="font-display text-2xl font-bold"
-            :class="totalWeight === 100 ? 'text-primary' : 'text-secondary'"
-          >
-            {{ totalWeight }}%
-          </span>
-          <p
-            v-if="totalWeight !== 100"
-            class="text-secondary mt-1 text-xs font-bold italic"
-          >
-            Recommended: 100%
-          </p>
+          <div class="flex items-center gap-2">
+            <span
+              class="font-display flex grow items-center justify-center text-2xl font-bold"
+              :class="totalWeight === 100 ? 'text-primary' : 'text-secondary'"
+            >
+              {{ totalWeight }}%
+            </span>
+            <CircleCheck
+              v-if="totalWeight === 100"
+              :size="20"
+              class="text-primary"
+            />
+            <button
+              v-else
+              class="font-display hover:text-writing flex flex-1 items-center justify-center gap-2 text-sm font-bold tracking-widest uppercase transition-colors md:flex-none"
+              @click="resetWeights"
+            >
+              <RefreshCw :size="16" />
+              Reset
+            </button>
+          </div>
         </div>
 
-        <div class="flex w-full gap-4 md:w-auto">
-          <button
-            class="font-display hover:text-writing flex flex-1 items-center justify-center gap-2 px-6 py-3 text-sm font-bold tracking-widest uppercase transition-colors md:flex-none"
-            @click="resetWeights"
-          >
-            <RefreshCw :size="16" />
-            Reset
-          </button>
+        <div class="col-span-1 flex w-full gap-4 md:w-auto">
           <button
             :disabled="saving"
             class="btn-primary flex flex-1 items-center justify-center gap-2 md:flex-none"

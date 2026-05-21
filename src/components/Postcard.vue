@@ -62,11 +62,11 @@ const imageSrc = computed(() => {
 <template>
   <div>
     <div
-      class="border-accent bg-primary-tint relative -z-20 flex w-xs flex-col overflow-hidden rounded-sm border-2 font-sans text-2xl font-semibold shadow"
+      class="border-accent bg-primary-tint relative flex w-xs flex-col overflow-hidden rounded-sm border-2 font-sans text-2xl font-semibold shadow"
       :class="[imageSrc ? 'h-[220px]' : 'max-h-[220px]']"
     >
       <div
-        class="bg-primary border-accent flex place-content-center gap-2 border-b px-2 pb-1 font-serif"
+        class="bg-primary border-accent z-10 flex place-content-center gap-2 border-b px-2 pb-1 font-serif"
       >
         <div class="grow">
           {{ props.name }}
@@ -85,9 +85,13 @@ const imageSrc = computed(() => {
           :src="imageSrc"
           loading="lazy"
           alt=""
-          class="absolute inset-0 -z-10 h-full w-full object-cover"
+          class="absolute inset-0 z-0 h-full w-full object-cover"
         />
-        <div v-if="rank" :key="mode" class="flex grow justify-end pt-2 pr-2">
+        <div
+          v-if="rank"
+          :key="mode"
+          class="z-10 flex grow justify-end pt-2 pr-2"
+        >
           <div v-if="rank > 3" class="flex flex-col">
             <div
               class="tape border-gray z-5 h-[10px] w-[20px] -rotate-2 place-self-center bg-amber-200/90"
@@ -120,7 +124,7 @@ const imageSrc = computed(() => {
         </div>
         <div
           v-if="mode !== 'none'"
-          class="flex items-center justify-between px-4 pb-4"
+          class="z-10 flex items-center justify-between px-4 pb-4"
           :class="[imageSrc ? '' : 'pt-4']"
         >
           <div class="flex flex-col">
@@ -148,7 +152,7 @@ const imageSrc = computed(() => {
           <div>
             <RouterLink
               :to="`/rate/${slug}`"
-              class="btn-primary font-serif text-sm"
+              class="btn-primary z-10 font-serif text-sm"
             >
               {{ mode === 'global' ? 'Rate Park' : 'Edit Rating' }}
             </RouterLink>
