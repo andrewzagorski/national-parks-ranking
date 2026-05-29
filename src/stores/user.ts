@@ -73,7 +73,7 @@ export const useUserStore = defineStore("user", () => {
   const cancelAuth = () => {
     showAuthModal.value = false;
     if (authReject) {
-      authReject(new Error("Authentication cancelled"));
+      authReject("Authentication cancelled");
       authResolve = null;
       authReject = null;
     }

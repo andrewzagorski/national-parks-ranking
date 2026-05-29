@@ -17,7 +17,7 @@
           </p>
         </div>
 
-        <div class="grid gap-8 md:grid-cols-2">
+        <div class="grid gap-8 md:grid-cols-1">
           <div
             class="bg-background-highlight/30 border-background-highlight rounded-2xl border p-6"
           >
@@ -26,17 +26,6 @@
               We store your unique ID in your browser's local storage and a
               functional cookie. This ensures your data stays with you when you
               return to the site.
-            </p>
-          </div>
-          <div
-            class="bg-background-highlight/30 border-background-highlight rounded-2xl border p-6"
-          >
-            <h3 class="mb-2 font-bold">Browser Signals</h3>
-            <p class="text-sm">
-              We use common browser characteristics (like screen resolution and
-              timezone) to create a unique "fingerprint." This helps us recover
-              your ID if your browser data is cleared, keeping your rankings
-              safe.
             </p>
           </div>
         </div>

@@ -226,20 +226,16 @@ const handleLogin = async () => {
       throw new Error('Invalid ID format. It should be a standard UUID.')
     }
 
-    // Check if user exists in DB
-    const { data, error } = await supabase
-      .from('users')
-      .select('id')
-      .eq('id', inputUuid.value.trim())
-      .single()
-
-    console.log(data, error)
+    // Check if user exists in DB via secure RPC
+    const { data, error } = await (supabase as any).rpc('verify_user_exists', {
+      p_id: inputUuid.value.trim()
+    })
 
     if (error || !data) {
       throw new Error('ID not found.')
     }
 
-    userStore.loginWithId(data.id)
+    userStore.loginWithId(inputUuid.value.trim())
   } catch (err: unknown) {
     console.error('Login error:', err)
     loginError.value = err instanceof Error ? err.message : 'Login failed'
