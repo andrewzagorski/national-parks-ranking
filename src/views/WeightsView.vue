@@ -26,11 +26,15 @@ const fetchData = async () => {
 
   metrics.value = metricsData || []
 
-  // Fetch existing weights
-  const { data: weightsData } = await supabase
-    .from('user_weights')
-    .select('metric_id, weight')
-    .eq('user_id', userStore.userId)
+  // Fetch existing weights if user is known
+  let weightsData = null
+  if (userStore.userId) {
+    const { data } = await supabase
+      .from('user_weights')
+      .select('metric_id, weight')
+      .eq('user_id', userStore.userId)
+    weightsData = data
+  }
 
   if (weightsData && weightsData.length > 0) {
     weightsData.forEach((w) => {
@@ -55,22 +59,29 @@ const totalWeight = computed(() => {
 const saveWeights = async () => {
   saving.value = true
 
-  const upserts = Object.entries(weights.value).map(([metricId, weight]) => ({
-    user_id: userStore.userId,
-    metric_id: parseInt(metricId),
-    weight
-  }))
+  try {
+    const userId = await userStore.requireAuth()
 
-  const { error } = await supabase
-    .from('user_weights')
-    .upsert(upserts, { onConflict: 'user_id, metric_id' })
+    const upserts = Object.entries(weights.value).map(([metricId, weight]) => ({
+      user_id: userId,
+      metric_id: parseInt(metricId),
+      weight
+    }))
 
-  lastUserWeights.value = { ...weights.value }
+    const { error } = await supabase
+      .from('user_weights')
+      .upsert(upserts, { onConflict: 'user_id, metric_id' })
 
-  if (error) {
-    console.error('Error saving weights:', error)
+    lastUserWeights.value = { ...weights.value }
+
+    if (error) {
+      console.error('Error saving weights:', error)
+    }
+  } catch (error) {
+    console.log('Authentication cancelled or failed:', error)
+  } finally {
+    saving.value = false
   }
-  saving.value = false
 }
 
 const resetWeights = () => {
@@ -175,7 +186,7 @@ onMounted(() => {
             />
             <button
               v-else
-              class="font-display hover:text-writing flex flex-1 items-center justify-center gap-2 text-sm font-bold tracking-widest uppercase transition-colors md:flex-none"
+              class="font-display hover:text-writing flex flex-1 items-center justify-center gap-2 text-sm font-bold tracking-widest uppercase transition-colors hover:cursor-pointer md:flex-none"
               @click="resetWeights"
             >
               <RefreshCw :size="16" />
@@ -186,8 +197,13 @@ onMounted(() => {
 
         <div class="col-span-1 flex w-full gap-4 md:w-auto">
           <button
-            :disabled="saving"
+            :disabled="saving || totalWeight !== 100"
             class="btn-primary flex flex-1 items-center justify-center gap-2 md:flex-none"
+            :class="
+              saving || totalWeight !== 100
+                ? 'cursor-not-allowed opacity-50'
+                : ''
+            "
             @click="saveWeights"
           >
             <Save v-if="!saving" :size="20" />

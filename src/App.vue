@@ -12,6 +12,7 @@ import { useTheme } from './composables/useTheme'
 import { computed } from 'vue'
 import { useLeaderboardStore } from './stores/leaderboard'
 import { storeToRefs } from 'pinia'
+import AuthModal from './components/AuthModal.vue'
 
 const leaderboardStore = useLeaderboardStore()
 const { searchQuery } = storeToRefs(leaderboardStore)
@@ -135,6 +136,9 @@ useTheme()
         <span class="mt-1 text-[10px] font-bold uppercase">ID</span>
       </RouterLink>
     </nav>
+
+    <!-- Global Modals -->
+    <AuthModal />
   </div>
 </template>
 

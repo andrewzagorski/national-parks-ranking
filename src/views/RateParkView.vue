@@ -22,11 +22,6 @@ interface Metric {
   label: string
 }
 
-interface Rating {
-  metric_id: number
-  score: number
-}
-
 const park = ref<Park | null>(null)
 const metrics = ref<Metric[]>([])
 const ratings = ref<Record<number, number>>({})
@@ -72,17 +67,19 @@ const fetchData = async () => {
       }
     })
 
-    // Fetch existing ratings
-    const { data: ratingsData } = await supabase
-      .from('ratings')
-      .select('metric_id, score')
-      .eq('park_id', parkData.id)
-      .eq('user_id', userStore.userId)
+    // Fetch existing ratings if user is known
+    if (userStore.userId) {
+      const { data: ratingsData } = await supabase
+        .from('ratings')
+        .select('metric_id, score')
+        .eq('park_id', parkData.id)
+        .eq('user_id', userStore.userId)
 
-    if (ratingsData) {
-      ratingsData.forEach((r) => {
-        ratings.value[r.metric_id] = r.score
-      })
+      if (ratingsData) {
+        ratingsData.forEach((r) => {
+          ratings.value[r.metric_id] = r.score
+        })
+      }
     }
   }
 
@@ -97,23 +94,30 @@ const saveRatings = async () => {
   if (!park.value) return
   saving.value = true
 
-  const upserts = Object.entries(ratings.value).map(([metricId, score]) => ({
-    user_id: userStore.userId,
-    park_id: park.value!.id,
-    metric_id: parseInt(metricId),
-    score
-  }))
+  try {
+    const userId = await userStore.requireAuth()
 
-  const { error } = await supabase
-    .from('ratings')
-    .upsert(upserts, { onConflict: 'user_id, park_id, metric_id' })
+    const upserts = Object.entries(ratings.value).map(([metricId, score]) => ({
+      user_id: userId,
+      park_id: park.value!.id,
+      metric_id: parseInt(metricId),
+      score
+    }))
 
-  if (error) {
-    console.error('Error saving ratings:', error)
-  } else {
-    router.push('/')
+    const { error } = await supabase
+      .from('ratings')
+      .upsert(upserts, { onConflict: 'user_id, park_id, metric_id' })
+
+    if (error) {
+      console.error('Error saving ratings:', error)
+    } else {
+      router.push('/')
+    }
+  } catch (error) {
+    console.log('Authentication cancelled or failed:', error)
+  } finally {
+    saving.value = false
   }
-  saving.value = false
 }
 
 onMounted(() => {
@@ -150,7 +154,7 @@ onMounted(() => {
         rubric.
       </p>
 
-      <div class="space-y-10">
+      <div class="space-y-8">
         <div v-for="metric in metricsDetails" :key="metric.id" class="relative">
           <div
             class="hover:text-primary mb-4 flex cursor-pointer items-center gap-2 transition-all duration-200"
@@ -189,7 +193,7 @@ onMounted(() => {
             <button
               v-for="score in 5"
               :key="score"
-              class="font-display flex-1 rounded-lg border-2 py-4 text-xl font-bold transition-all"
+              class="font-display flex-1 rounded-md border-2 py-2 text-xl font-bold transition-all hover:cursor-pointer"
               :class="[
                 ratings[metric.id] === score
                   ? 'bg-primary border-accent shadow-sticker -translate-y-1 text-white'
@@ -208,13 +212,16 @@ onMounted(() => {
             <span>Exceptional</span>
           </div>
 
-          <div class="hand-drawn-divider mt-8"></div>
+          <div class="hand-drawn-divider mt-4"></div>
         </div>
       </div>
 
       <div class="mt-16 flex flex-col items-center">
         <button
           :disabled="saving"
+          :class="{
+            'cursor-not-allowed opacity-50': saving
+          }"
           class="btn-primary flex w-full max-w-sm items-center justify-center gap-3 py-4 text-lg"
           @click="saveRatings"
         >

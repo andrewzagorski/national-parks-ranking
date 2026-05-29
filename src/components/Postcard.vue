@@ -152,7 +152,7 @@ const imageSrc = computed(() => {
           <div>
             <RouterLink
               :to="`/rate/${slug}`"
-              class="btn-primary z-10 font-serif text-sm"
+              class="btn-primary border-accent z-10 border-2 font-serif text-sm"
             >
               {{ mode === 'global' ? 'Rate Park' : 'Edit Rating' }}
             </RouterLink>
