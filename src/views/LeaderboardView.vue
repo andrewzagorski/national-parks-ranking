@@ -86,7 +86,7 @@ onMounted(async () => {
         class="bg-background-highlight border-accent/5 inline-flex rounded-xl border p-1"
       >
         <button
-          class="font-display flex items-center gap-2 rounded-lg px-4 py-1 text-sm font-bold transition-all md:px-6 md:py-2"
+          class="font-display flex cursor-pointer items-center gap-2 rounded-lg px-4 py-1 text-sm font-bold transition-all md:px-6 md:py-2"
           :class="
             mode === 'global'
               ? 'text-primary-tint shadow-sm'
@@ -98,7 +98,7 @@ onMounted(async () => {
           Global
         </button>
         <button
-          class="font-display flex items-center gap-2 rounded-lg px-4 py-1 text-sm font-bold transition-all md:px-6 md:py-2"
+          class="font-display flex cursor-pointer items-center gap-2 rounded-lg px-4 py-1 text-sm font-bold transition-all md:px-6 md:py-2"
           :class="
             mode === 'personal'
               ? 'text-secondary-tint shadow-sm'

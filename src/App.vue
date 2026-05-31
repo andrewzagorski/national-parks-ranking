@@ -95,13 +95,13 @@ useTheme()
         </div>
         <div class="flex items-center gap-6">
           <RouterLink
-            to="/privacy"
+            to="/about"
             class="hover:text-primary text-sm font-bold transition-colors"
           >
-            Privacy & Identity
+            About
           </RouterLink>
           <a
-            href="https://github.com"
+            href="https://github.com/andrewzagorski/national-parks-ranking"
             target="_blank"
             class="hover:text-primary text-sm font-bold transition-colors"
           >
