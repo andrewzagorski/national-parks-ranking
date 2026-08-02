@@ -21,7 +21,7 @@ defineProps({
 
 const { theme, themes, setTheme } = useTheme()
 
-const swatchOrder = ['background', 'primary', 'secondary', 'accent', 'text']
+const swatchOrder = ['primary', 'secondary', 'background', 'text']
 </script>
 
 <template>

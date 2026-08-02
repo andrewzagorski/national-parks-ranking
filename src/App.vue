@@ -27,7 +27,7 @@ useTheme()
   <div class="flex min-h-screen flex-col">
     <!-- Header -->
     <header
-      class="border-background-highlight sticky top-0 z-50 border-b bg-white"
+      class="border-background-highlight bg-background-highlight sticky top-0 z-50 border-b"
     >
       <div
         class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4"
@@ -75,7 +75,7 @@ useTheme()
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1">
+    <main class="bg-background flex-1">
       <RouterView v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -85,7 +85,7 @@ useTheme()
 
     <!-- Footer -->
     <footer
-      class="bg-background-highlight/10 border-background-highlight border-t py-8 pb-24 md:pb-8"
+      class="bg-background-highlight border-background-highlight border-t py-8 pb-24 md:pb-8"
     >
       <div
         class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 md:flex-row"
