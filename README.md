@@ -25,6 +25,7 @@ Sure, why not.
 
 ### TODO list
 
+- Upon rating, refresh the global scores
 - Add images for each park
 - Add more themes
 - Add "tiebreaker" functionality
