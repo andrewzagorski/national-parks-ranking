@@ -21,7 +21,7 @@ defineProps({
 
 const { theme, themes, setTheme } = useTheme()
 
-const swatchOrder = ['primary', 'secondary', 'background', 'text']
+const swatchOrder = ['primary', 'secondary']
 </script>
 
 <template>
@@ -37,6 +37,7 @@ const swatchOrder = ['primary', 'secondary', 'background', 'text']
         role="radio"
         :aria-checked="theme === t.id"
         :aria-label="`${t.label} theme — ${t.description}`"
+        :style="{ backgroundColor: t.swatches['background'] }"
         @click="setTheme(t.id)"
       >
         <!-- Swatch strip -->
@@ -50,7 +51,7 @@ const swatchOrder = ['primary', 'secondary', 'background', 'text']
         </span>
 
         <!-- Label row -->
-        <span class="theme-picker__name">
+        <span class="theme-picker__name" :style="{ color: t.swatches['text'] }">
           {{ t.label }}
           <span
             v-if="theme === t.id"
@@ -59,7 +60,11 @@ const swatchOrder = ['primary', 'secondary', 'background', 'text']
             >✓</span
           >
         </span>
-        <span class="theme-picker__description">{{ t.description }}</span>
+        <span
+          class="theme-picker__description"
+          :style="{ color: t.swatches['text'] }"
+          >{{ t.description }}</span
+        >
       </button>
     </div>
   </div>
@@ -134,17 +139,14 @@ const swatchOrder = ['primary', 'secondary', 'background', 'text']
   justify-content: space-between;
   font-size: 0.875rem;
   font-weight: 600;
-  color: oklch(var(--color-text));
 }
 
 .theme-picker__checkmark {
   font-size: 0.75rem;
-  color: oklch(var(--color-primary));
 }
 
 .theme-picker__description {
   font-size: 0.7rem;
-  color: oklch(var(--color-text-highlight));
   line-height: 1.3;
 }
 </style>

@@ -25,9 +25,9 @@ Sure, why not.
 
 ### TODO list
 
-- Upon rating, refresh the global scores
 - Add images for each park
 - Add more themes
+- Themes save to user profile to apply on login
 - Add "tiebreaker" functionality
 - Hover the score post-it to view the score breakdown by metric
 - Comments

@@ -68,11 +68,7 @@ export const useLeaderboardStore = defineStore("leaderboard", () => {
       }));
   };
 
-  const fetchGlobalLeaderboard = async () => {
-    // TODO cache timeout every x minutes; also update after user updates weights or rates a park
-    if (globalLeaderboard.value.length > 0) {
-      return;
-    }
+  const refreshGlobalLeaderboard = async () => {
     const { data, error } = await supabase.from("aggregate_scores").select("*");
 
     if (error) {
@@ -85,9 +81,19 @@ export const useLeaderboardStore = defineStore("leaderboard", () => {
     }
   };
 
+  const fetchGlobalLeaderboard = async () => {
+    // TODO cache timeout every x minutes; also update after user updates weights or rates a park
+    if (globalLeaderboard.value.length > 0) {
+      return;
+    }
+
+    await refreshGlobalLeaderboard();
+  };
+
   return {
     fetchPersonalLeaderboard,
     fetchGlobalLeaderboard,
+    refreshGlobalLeaderboard,
     personalLeaderboard,
     isLoadingPersonalLeaderboard,
     globalLeaderboard,

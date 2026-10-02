@@ -7,14 +7,16 @@
       class="bg-background-tint flex w-full max-w-md flex-col overflow-hidden rounded-xl border shadow-xl"
     >
       <div class="p-6 pb-0">
-        <h2 class="text-2xl font-bold">Been here before?</h2>
-        <p class="mt-2 text-sm">
+        <h2 class="text-2xl font-bold">
+          {{ showSavedStep ? 'Your ID' : 'Been here before?' }}
+        </h2>
+        <p v-if="!showSavedStep" class="mt-2 text-sm">
           If you have an ID, enter it below. Otherwise, we'll generate one for
           you.
         </p>
       </div>
 
-      <div class="border-border mt-4 flex border-b">
+      <div v-if="!showSavedStep" class="border-border mt-4 flex border-b">
         <button
           class="flex-1 py-3 text-sm font-medium transition-colors"
           :class="isNewUser ? 'text-primary border-primary border-b-2' : ''"
@@ -32,11 +34,63 @@
       </div>
 
       <div class="flex-1 overflow-y-auto p-6 pt-4">
-        <div v-if="isNewUser" class="space-y-4">
+        <div v-if="showSavedStep" class="space-y-4">
           <p class="text-card-foreground text-sm">
-            We will generate a unique ID for you. Please save this ID somewhere
-            safe (like a password manager) if you want to access your data on
+            This is your unique ID. Make sure it's saved in your password
+            manager or somewhere safe. You'll need it to access your data on
             other devices.
+          </p>
+          <code
+            class="bg-background block w-full rounded-md border px-3 py-2 text-sm break-all select-all"
+          >
+            {{ generatedId }}
+          </code>
+          <div class="mt-6 flex justify-end gap-3">
+            <button
+              type="button"
+              class="btn-transparent text-sm"
+              @click="copyGeneratedId"
+            >
+              {{ copied ? 'Copied' : 'Copy ID' }}
+            </button>
+            <button
+              type="button"
+              class="btn-primary text-sm"
+              @click="handleContinue"
+            >
+              I've saved it, continue
+            </button>
+          </div>
+        </div>
+
+        <form
+          v-else-if="isNewUser"
+          class="space-y-4"
+          @submit.prevent="handleRegister"
+        >
+          <input
+            type="text"
+            name="username"
+            autocomplete="username"
+            :value="AUTH_USERNAME"
+            class="sr-only"
+            tabindex="-1"
+            aria-hidden="true"
+          />
+          <input
+            v-model="generatedId"
+            type="password"
+            name="password"
+            autocomplete="new-password"
+            class="sr-only"
+            tabindex="-1"
+            aria-hidden="true"
+          />
+
+          <p class="text-card-foreground text-sm">
+            We will generate a unique ID for you. Your browser or password
+            manager will offer to save it. Please save it if you want to access
+            your data on other devices.
           </p>
           <div class="my-4 flex justify-center">
             <vue-turnstile
@@ -50,33 +104,39 @@
             {{ registrationError }}
           </p>
           <div class="mt-6 flex justify-end gap-3">
-            <button class="btn-transparent text-sm" @click="handleCancel">
+            <button
+              type="button"
+              class="btn-transparent text-sm"
+              @click="handleCancel"
+            >
               Cancel
             </button>
             <button
-              class="btn-primary border-primary-tint border text-sm"
+              type="submit"
+              class="btn-primary text-sm"
               :class="{
                 'cursor-not-allowed opacity-50':
                   !turnstileVerified || isSubmitting
               }"
               :disabled="!turnstileVerified || isSubmitting"
-              @click="handleRegister"
             >
               <span v-if="isSubmitting">Registering...</span>
               <span v-else>Generate ID</span>
             </button>
           </div>
-        </div>
+        </form>
 
         <div v-else class="space-y-4">
           <form class="space-y-4" @submit.prevent="handleLogin">
             <!-- Hidden username field for password managers -->
             <input
               type="text"
+              name="username"
               autocomplete="username"
-              value=""
+              :value="AUTH_USERNAME"
               class="sr-only"
-              readonly
+              tabindex="-1"
+              aria-hidden="true"
             />
 
             <div class="space-y-2">
@@ -86,6 +146,7 @@
               <input
                 id="uuid"
                 v-model="inputUuid"
+                name="password"
                 type="password"
                 autocomplete="current-password"
                 placeholder="Enter your user ID..."
@@ -108,7 +169,7 @@
               </button>
               <button
                 type="submit"
-                class="btn-primary border-primary-tint border text-sm"
+                class="btn-primary text-sm"
                 :disabled="!inputUuid || isSubmitting"
                 :class="{
                   'cursor-not-allowed opacity-50': !inputUuid || isSubmitting
@@ -132,13 +193,19 @@ import { ref, watch } from 'vue'
 import { useUserStore } from '../stores/user'
 import VueTurnstile from 'vue-turnstile'
 import { supabase } from '../utils/supabase'
+import { v4 as uuidv4 } from 'uuid'
 
 const userStore = useUserStore()
+
+const AUTH_USERNAME = 'Parkgoer'
 
 const isNewUser = ref(true)
 const turnstileToken = ref('')
 const turnstileVerified = ref(false)
 const inputUuid = ref('')
+const generatedId = ref(uuidv4())
+const showSavedStep = ref(false)
+const copied = ref(false)
 const isSubmitting = ref(false)
 const loginError = ref('')
 const registrationError = ref('')
@@ -168,6 +235,9 @@ watch(
       turnstileToken.value = ''
       turnstileVerified.value = false
       inputUuid.value = ''
+      generatedId.value = uuidv4()
+      showSavedStep.value = false
+      copied.value = false
       registrationError.value = ''
       loginError.value = ''
       isNewUser.value = true
@@ -197,7 +267,7 @@ const handleRegister = async () => {
     if (error) throw error
     if (!data?.success) throw new Error('Captcha verification failed')
 
-    userStore.registerNewUser()
+    showSavedStep.value = true
   } catch (err: unknown) {
     console.error('Registration error:', err)
     registrationError.value =
@@ -207,6 +277,20 @@ const handleRegister = async () => {
     turnstileVerified.value = false
   } finally {
     isSubmitting.value = false
+  }
+}
+
+const handleContinue = () => {
+  userStore.registerNewUser(generatedId.value)
+}
+
+const copyGeneratedId = async () => {
+  try {
+    await navigator.clipboard.writeText(generatedId.value)
+    copied.value = true
+    setTimeout(() => (copied.value = false), 2000)
+  } catch (err) {
+    console.error('Copy failed:', err)
   }
 }
 

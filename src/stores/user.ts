@@ -8,7 +8,6 @@ export const useUserStore = defineStore("user", () => {
     userId,
     initUser,
     // getFingerprint,
-    generateAndSetNewUserId,
     setExistingUserId,
   } = useUser();
   const initialized = ref(false);
@@ -84,12 +83,12 @@ export const useUserStore = defineStore("user", () => {
     resolveAuth(id);
   };
 
-  const registerNewUser = async () => {
-    const newId = generateAndSetNewUserId();
+  const registerNewUser = async (generatedId: string) => {
+    setExistingUserId(generatedId);
 
     // Insert the new user into the users table before resolving
     const { error } = await supabase.from("users").insert({
-      id: newId,
+      id: generatedId,
       last_seen: new Date().toISOString(),
     });
 
@@ -97,7 +96,7 @@ export const useUserStore = defineStore("user", () => {
       console.error("Failed to create user in database:", error);
     }
 
-    resolveAuth(newId);
+    resolveAuth(generatedId);
   };
 
   return {

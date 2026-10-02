@@ -5,10 +5,12 @@ import { supabase } from '../utils/supabase'
 import { useUserStore } from '../stores/user'
 import { ChevronLeft, Save, Mountain, ChevronDown } from 'lucide-vue-next'
 import rubric, { type RubricItem } from '../utils/rubric'
+import { useLeaderboardStore } from '../stores/leaderboard'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const leaderboardStore = useLeaderboardStore()
 
 interface Park {
   id: number
@@ -111,6 +113,7 @@ const saveRatings = async () => {
     if (error) {
       console.error('Error saving ratings:', error)
     } else {
+      await leaderboardStore.refreshGlobalLeaderboard()
       router.push('/')
     }
   } catch (error) {

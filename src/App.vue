@@ -3,7 +3,7 @@ import { RouterView, RouterLink, useRoute } from 'vue-router'
 import {
   Mountain,
   Award,
-  Settings,
+  Weight,
   Fingerprint,
   Search,
   CircleX
@@ -113,7 +113,7 @@ useTheme()
 
     <!-- Mobile Navigation -->
     <nav
-      class="border-background-highlight fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between border-t bg-white px-6 py-3 md:hidden"
+      class="border-background-highlight bg-background fixed right-0 bottom-0 left-0 z-50 grid grid-cols-3 items-center border-t px-6 py-3 md:hidden"
     >
       <RouterLink to="/" class="mobile-nav-link" active-class="text-primary">
         <Award :size="24" />
@@ -124,7 +124,7 @@ useTheme()
         class="mobile-nav-link"
         active-class="text-primary"
       >
-        <Settings :size="24" />
+        <Weight :size="24" />
         <span class="mt-1 text-[10px] font-bold uppercase">Weights</span>
       </RouterLink>
       <RouterLink
